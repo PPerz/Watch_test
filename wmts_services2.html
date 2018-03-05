@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>WMTS example - Leaflet</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+    <script src="https://unpkg.com/proj4leaflet@1.0.2/lib/proj4-compressed.js"></script>
+    <script src="https://unpkg.com/proj4leaflet@1.0.2/src/proj4leaflet.js"></script>
+    <script src="../src/TileLayer.ProjWMTS.js"></script>
+    <script src="https://unpkg.com/esri-leaflet@2.1.1"></script>
+
+    <style>
+        #map1 {
+            width: 1200px;
+            height: 1000px;
+        }
+
+        body {
+            background-color: #333;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            text-shadow: 0 0 4px white;
+            font-size: smaller;
+        }
+    </style>
+    <link rel="stylesheet" href="../dist/g2search.css" />
+    <script src="../dist/g2search.js"></script>
+</head>
+
+<body>
+    <div id='map1'></div>
+    Opacity:<input id="iOpacity" type="number" value="50" min="0" max="100" step="10" />
+    <script type="text/javascript">
+        proj4.defs('EPSG:2180', '+proj=tmerc +lat_0=0 +lon_0=19 +k=0.9993 +x_0=500000 +y_0=-5300000 +ellps=GRS80 +units=m +no_defs');
+        var crs = new L.Proj.CRS(
+            "EPSG:2180",
+            "+proj=tmerc +lat_0=0 +lon_0=19 +k=0.9993 +x_0=500000 +y_0=-5300000 +ellps=GRS80 +units=m +no_defs", {});
+        var map1 = L.map('map1', {
+            center: [52.16571296852608, 19.00755380630493],
+            zoom: 7
+        });
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+            maxZoom: 20,
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery Â© <a href="http://mapbox.com">Mapbox</a>',
+            id: 'mapbox.streets'
+        }).addTo(map1);
+
+        var latlngs1 = [
+            [52.66, 19.32],
+            [52.66, 20.32],
+            [51.75, 20.32],
+            [51.75, 19.32]
+        ];
+        var latlngs2 = [
+            [51.66, 17.32],
+            [51.66, 20.98],
+            [50.75, 20.98],
+            [50.75, 17.32]
+        ];
+
+        var latlngs3 = [
+            [53.66, 16.32],
+            [53.66, 19.98],
+            [52.75, 19.98],
+            [52.75, 16.32]
+        ];
+
+        var polygon1 = L.polygon(latlngs1, {
+            color: 'red'
+        }).bindPopup("podlaskie").addTo(map1);
+        polygon1.on('mouseover', function(e) {
+            this.openPopup();
+        });
+        polygon1.on('mouseout', function(e) {
+            this.closePopup();
+        });
+
+
+        var polygon2 = L.polygon(latlngs2, {
+            color: 'blue'
+        }).addTo(map1);
+        polygon2.on('mouseover', function(e) {
+            this.openPopup();
+        });
+        polygon2.on('mouseout', function(e) {
+            this.closePopup();
+        });
+        polygon2.on("click", function () {
+            map1.fitBounds([[53.66, 16.32], [52.75, 19.98]]);
+        });
+
+        var polygon3 = L.polygon(latlngs3, {
+            color: 'green'
+        }).bindPopup("pomorskie").addTo(map1);
+        polygon1.on('mouseover', function(e) {
+            this.openPopup();
+        });
+        polygon1.on('mouseout', function(e) {
+            this.closePopup();
+        });
+
+
+        /*
+        function zoomToFeature(e) {
+            map1.fitBounds(e.target.getBounds());
+        }
+
+        function onEachFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                click: zoomToFeature
+            });
+        }
+        */
+        L.control.scale().addTo(map1);
+    </script>
+</body>
+
+</html>
