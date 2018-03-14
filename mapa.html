@@ -2,22 +2,24 @@
 <html>
 
 <head>
-    <title>Getting Started - Leaflet js Map interactive library</title>
+    <title>Aplikacja testowa</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<style>
+
+</style>
 </head>
 
 <body>
-    <div id="map" style="width: 1000px; height: 600px;"></div>
+    <div id="map" style="width: 800px; height: 500px;"></div>
     <script>
         var newMap = L.map('map').setView([52.0708398, 18.9188702], 7);
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href=”http://osm.org/copyright”>OpenStreetMap</a> contributors'
+            attribution: '&copy; <a href=â€http://osm.org/copyrightâ€>OpenStreetMap</a> contributors'
         }).addTo(newMap);
-
         // loading GeoJSON file
         $.getJSON("wojewodztwa2.geojson", function(data) {
             var datalayer = L.geoJson(data, {
@@ -30,12 +32,31 @@
                         this.closePopup();
                     });
                 }
-
             }).addTo(newMap);
-
-
             newMap.fitBounds(datalayer.getBounds());
         });
+
+		
+		
+    // create custom icon
+    var firefoxIcon = L.icon({
+        iconUrl: 'http://joshuafrazier.info/images/firefox.svg',
+        iconSize: [38, 95], // size of the icon
+        popupAnchor: [0,-25]
+        });
+
+    // create popup contents
+    var customPopup = "WP";
+    
+    // specify popup options 
+    var customOptions =
+        {
+        'maxWidth': '500',
+        'className' : 'custom'
+        }
+    
+    // create marker object, pass custom icon as option, pass content and options to popup, add to map
+    L.marker([52.5243700, 13.4105300], {icon: firefoxIcon}).bindPopup(customPopup,customOptions).addTo(newMap);
 
     </script>
 </body>
